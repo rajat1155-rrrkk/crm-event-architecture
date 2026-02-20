@@ -1,3 +1,5 @@
+[![Python CI](https://github.com/rajat1155-rrrkk/crm-event-architecture/actions/workflows/python-app.yml/badge.svg)](https://github.com/rajat1155-rrrkk/crm-event-architecture/actions/workflows/python-app.yml)
+
 # CRM Event Architecture
 
 Enterprise-style event-driven CRM architecture simulation.
