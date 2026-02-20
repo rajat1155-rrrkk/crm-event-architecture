@@ -19,14 +19,29 @@ Core architectural layers:
 - Dead Letter Queue Simulation
 - Unit Testing Layer
 
-The design reflects enterprise integration patterns used in Salesforce-led and distributed CRM ecosystems.
+The design mirrors enterprise integration patterns used in Salesforce-led and distributed CRM ecosystems.
 
 ---
 
 ## 🔄 High-Level Event Flow
 
-Lead Created → Event Published → Event Bus → Consumer Processing  
-If failure → Retry Handler → Dead Letter Queue (if max retries exceeded)
+
+Lead Created
+↓
+Event Published (LeadCreated)
+↓
+Event Bus
+↓
+Consumer Processing
+↓
+[If Failure]
+↓
+Retry Handler (Controlled Attempts)
+↓
+Dead Letter Queue (If Retries Exhausted)
+
+
+This models real-world distributed system behavior where failure handling and resiliency are first-class architectural concerns.
 
 ---
 
@@ -51,12 +66,11 @@ crm-event-architecture/
 │ └── dead_letter_queue.py
 │
 ├── tests/
-│ └── test_event_flow.py
+│ ├── test_event_flow.py
+│ └── test_resilience.py
 │
+├── main.py
 └── README.md
-
-
-
 
 
 ---
@@ -67,41 +81,50 @@ crm-event-architecture/
 - Demonstrate retry and resilience patterns
 - Model enterprise CRM integration logic
 - Maintain modular and testable design
-- Provide architectural demonstration use case
+- Showcase distributed system thinking
 
 ---
 
-## 🛠 Tech Stack
+## ⚙️ Core Components
 
-- Python
-- Object-Oriented Design
-- Publisher–Subscriber Pattern
-- Retry with Backoff Simulation
-- Unit Testing (unittest)
+### Event Bus
+
+Implements a lightweight publish–subscribe pattern allowing decoupled event communication between publishers and consumers.
+
+### Publishers
+
+Domain-level components that emit events (e.g., `LeadCreated`) into the system.
+
+### Consumers
+
+Independent handlers that process domain events asynchronously.
+
+### Retry Handler
+
+Implements controlled retry attempts with delay to simulate enterprise-grade resilience patterns.
+
+### Dead Letter Queue (DLQ)
+
+Captures events that fail after exhausting retry attempts, simulating real-world fault tolerance strategies.
 
 ---
 
-## 🔮 Future Enhancements
+## 🧪 Resilience & Failure Handling
 
-- AsyncIO-based event bus
-- Persistent event store simulation
-- Circuit breaker pattern
-- Logging abstraction
-- Observability layer
-- Webhook-style external integrations
+This architecture models enterprise-grade failure management patterns:
+
+- Controlled retry attempts
+- Backoff delay simulation
+- Dead Letter Queue handling for unrecoverable events
+- Separation of event publishing and failure processing logic
+
+These patterns reflect real-world distributed CRM integration systems where fault tolerance and observability are critical.
 
 ---
 
-## 📌 Project Purpose
+## ▶ Running the Demo
 
-This repository demonstrates enterprise event-driven CRM system design patterns for architectural modeling, system thinking, and distributed workflow simulation.
+To simulate the event flow:
 
-
-
-
-
-
-
-
-
-
+```bash
+python main.py
